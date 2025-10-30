@@ -5,3 +5,5 @@ tavily-python
 pandas
 openai
 fastapi
+uvicorn
+
