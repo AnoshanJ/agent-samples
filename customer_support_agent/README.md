@@ -5,6 +5,28 @@ This project implements a simple agent service with a FastAPI endpoint that acce
 
 Agent is taken from: https://github.com/langchain-ai/langgraph/blob/main/docs/docs/tutorials/customer-support/customer-support.ipynb
 
+## 🆕 PostgreSQL Support
+
+**This project now supports PostgreSQL databases (Neon, Supabase, etc.) in addition to SQLite!**
+
+For a complete migration guide, see:
+- **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Step-by-step instructions
+- **[MIGRATION_SUMMARY.md](MIGRATION_SUMMARY.md)** - Technical details and changes
+
+### Quick Start with PostgreSQL
+
+1. Create a database on [Neon](https://neon.tech) or [Supabase](https://supabase.com)
+2. Run the interactive setup:
+   ```bash
+   python setup/quick_start.py
+   ```
+3. Or manually configure:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your DATABASE_URL
+   python setup/migrate_to_postgres.py
+   ```
+
 ## Requirements
 
 - Python 3.10+ (project uses Python 3.13 bytecode in the workspace but 3.10+ is recommended)
@@ -16,29 +38,52 @@ pip install -r requirements.txt
 
 ## Configuration
 
-The service requires two API keys (set these as environment variables or in a `.env` file in the project root):
+The service requires API keys and database configuration. Set these as environment variables or in a `.env` file in the project root:
 
+**Required:**
 - `OPENAI_API_KEY` - your OpenAI API key
-- `TRIVIY_API_KEY` - your Triviy API key
+- `TAVILY_API_KEY` - your Tavily API key (note: was TRIVIY_API_KEY before)
+- `DATABASE_URL` - PostgreSQL connection string (for remote database)
 
-Example `.env` file:
+Example `.env` file for PostgreSQL:
 
-```
+```env
 OPENAI_API_KEY=sk-...
-TRIVIY_API_KEY=triviy-...
+TAVILY_API_KEY=tvly-...
+DATABASE_URL=postgresql://user:password@host:port/database?sslmode=require
 ```
 
-The project loads environment variables using `python-dotenv` in `app.py`.
+The project loads environment variables using `python-dotenv`.
 
 ## Initialize the database
 
-Before starting the service, create and initialize the SQLite database using the provided setup script:
+### Option 1: PostgreSQL (Recommended for Production)
+
+1. Create a PostgreSQL database on [Neon](https://neon.tech) or [Supabase](https://supabase.com)
+2. Add your `DATABASE_URL` to `.env`
+3. Run the migration script:
+
+```bash
+python setup/migrate_to_postgres.py
+```
+
+4. Verify the migration:
+
+```bash
+python setup/test_migration.py
+```
+
+### Option 2: SQLite (Legacy, Local Development Only)
+
+Before starting the service, create and initialize the SQLite database:
 
 ```bash
 python setup/db.py
 ```
 
-This will create the necessary database file(s) (for example `travel2.sqlite`) used by the project's tools.
+This will create `travel2.sqlite` in the project root.
+
+**Note:** The application has been updated to use PostgreSQL by default. SQLite support is maintained for backward compatibility but not recommended for production use.
 
 ## Running the FastAPI server
 

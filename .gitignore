@@ -1,0 +1,10 @@
+__pycache__/
+.env
+travel2.sqlite
+
+.venv/
+*.pyc
+.DS_Store
+.idea/
+.vscode/
+
