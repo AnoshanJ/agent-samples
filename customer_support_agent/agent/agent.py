@@ -1,5 +1,5 @@
 # %%
-from langchain_community.tools.tavily_search import TavilySearchResults
+# from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable
 from langchain_openai import ChatOpenAI
@@ -13,6 +13,7 @@ from tools.hotels import *
 from tools.policies import *
 
 load_dotenv(".env")
+
 
 class Assistant:
     def __init__(self, runnable: Runnable):
@@ -31,7 +32,8 @@ class Assistant:
                     or isinstance(result.content, list)
                     and not result.content[0].get("text")
             ):
-                messages = state["messages"] + [("user", "Respond with a real output.")]
+                messages = state["messages"] + \
+                    [("user", "Respond with a real output.")]
                 state = {**state, "messages": messages}
             else:
                 break
@@ -57,7 +59,7 @@ def create_agent():
     ).partial(time=datetime.now)
 
     _tools = [
-        TavilySearchResults(max_results=1),
+        # TavilySearchResults(max_results=1),
         fetch_user_flight_information,
         search_flights,
         lookup_policy,
