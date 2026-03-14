@@ -1,30 +1,21 @@
-# Use the official Python image as a base
-FROM python:3.11-slim
-
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Use official Python image as base
+FROM python:3.10-slim
 
 # Set work directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements
+# Copy requirements and install dependencies
 COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
-
-# Copy project files
+# Copy the rest of the application
 COPY . .
 
-# Expose port (change if your app uses a different port)
+# Expose port 8000
 EXPOSE 8000
 
-# Default command (update if your entrypoint is different)
+# Set environment variables (optional)
+ENV PYTHONUNBUFFERED=1
+
+# Start the app
 CMD ["python", "main.py"]
