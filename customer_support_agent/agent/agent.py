@@ -54,7 +54,7 @@ def create_agent():
             temperature=1,
             api_key=apiKey or "placeholder",
             base_url=baseUrl,
-            default_headers={"X-API-Key": apiKey, "Authorization": ""},
+            default_headers={"API-Key": apiKey or "", "Authorization": ""},
         )
     else:
         # Direct OpenAI: use OPENAI_API_KEY normally.
