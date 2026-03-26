@@ -46,15 +46,19 @@ def create_agent():
 
     apiKey = os.environ.get("CUSTOM_API_KEY")
     baseUrl = os.environ.get("CUSTOM_BASE_URL")
-    
-    
-    llm = ChatOpenAI(
-        model="gpt-4o",
-        temperature=1,
-        api_key="placeholder",
-        base_url=baseUrl,
-        default_headers={"X-API-Key": apiKey, "Authorization": ""},
-    )
+
+    if baseUrl:
+        # Custom proxy: auth is handled via CUSTOM_API_KEY header; api_key just satisfies SDK validation.
+        llm = ChatOpenAI(
+            model="gpt-4o",
+            temperature=1,
+            api_key=apiKey or "placeholder",
+            base_url=baseUrl,
+            default_headers={"X-API-Key": apiKey, "Authorization": ""},
+        )
+    else:
+        # Direct OpenAI: use OPENAI_API_KEY normally.
+        llm = ChatOpenAI(model="gpt-4o", temperature=1)
 
     primary_assistant_prompt = ChatPromptTemplate.from_messages(
         [
