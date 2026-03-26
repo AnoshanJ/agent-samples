@@ -46,13 +46,19 @@ class VectorStoreRetriever:
         ]
 
 
-_api_key = os.environ.get("CUSTOM_API_KEY") or os.environ.get("OPENAI_API_KEY")
-_base_url = os.environ.get("CUSTOM_BASE_URL")
-retriever = VectorStoreRetriever.from_docs(docs, openai.Client(api_key=_api_key, base_url=_base_url))
+_base_url = os.environ.get("CUSTOM_BASE_URL") or None
+_api_key = os.environ.get("CUSTOM_API_KEY") or os.environ.get("OPENAI_API_KEY") or "placeholder"
+try:
+    retriever = VectorStoreRetriever.from_docs(docs, openai.Client(api_key=_api_key, base_url=_base_url))
+except Exception as e:
+    print(f"Warning: Failed to initialize policy retriever: {e}")
+    retriever = None
 
 
 @tool
 def lookup_policy(query: str) -> str:
     """This tool provides the company policies."""
+    if retriever is None:
+        return "Policy lookup is currently unavailable."
     docs = retriever.query(query, k=2)
     return "\n\n".join([doc["page_content"] for doc in docs])
