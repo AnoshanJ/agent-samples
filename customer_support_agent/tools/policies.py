@@ -1,4 +1,5 @@
 # %%
+import os
 import re
 
 import numpy as np
@@ -45,7 +46,9 @@ class VectorStoreRetriever:
         ]
 
 
-retriever = VectorStoreRetriever.from_docs(docs, openai.Client())
+_api_key = os.environ.get("CUSTOM_API_KEY") or os.environ.get("OPENAI_API_KEY")
+_base_url = os.environ.get("CUSTOM_BASE_URL")
+retriever = VectorStoreRetriever.from_docs(docs, openai.Client(api_key=_api_key, base_url=_base_url))
 
 
 @tool
