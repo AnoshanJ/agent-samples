@@ -58,7 +58,7 @@ def create_agent():
         )
     else:
         # Direct OpenAI: use OPENAI_API_KEY normally.
-        llm = ChatOpenAI(model="gpt-4o", temperature=1)
+        llm = ChatOpenAI(model="gpt-4o", temperature=1, api_key=os.environ.get("OPENAI_API_KEY", "placeholder"))
 
     primary_assistant_prompt = ChatPromptTemplate.from_messages(
         [

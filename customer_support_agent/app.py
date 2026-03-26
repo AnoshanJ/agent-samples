@@ -9,7 +9,11 @@ from agent.agent import create_agent
 app = FastAPI()
 # Load environment variables from a .env file (if present)
 dotenv.load_dotenv()
-agent_graph = create_agent()
+try:
+    agent_graph = create_agent()
+except Exception as e:
+    print(f"Warning: Failed to initialize agent: {e}")
+    agent_graph = None
 
 
 def run_agent(thread_id: int, question: str, passenger_id: str = "3442 587242"):
@@ -22,6 +26,9 @@ def run_agent(thread_id: int, question: str, passenger_id: str = "3442 587242"):
             "thread_id": thread_id,
         }
     }
+
+    if agent_graph is None:
+        return "Agent is currently unavailable."
 
     events = agent_graph.stream(
         {"messages": ("user", question)}, config, stream_mode="values"

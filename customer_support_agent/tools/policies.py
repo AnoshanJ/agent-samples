@@ -46,11 +46,19 @@ class VectorStoreRetriever:
         ]
 
 
-_base_url = os.environ.get("CUSTOM_BASE_URL") or None
-_api_key = os.environ.get("CUSTOM_API_KEY") or os.environ.get("OPENAI_API_KEY") or "placeholder"
+
+
+base_url = os.environ.get("CUSTOM_BASE_URL") or None
+api_key = os.environ.get("CUSTOM_API_KEY") or os.environ.get("OPENAI_API_KEY") or "placeholder"
 try:
-    retriever = VectorStoreRetriever.from_docs(docs, openai.Client(api_key=_api_key, base_url=_base_url))
-except Exception as e:
+    retriever = VectorStoreRetriever.from_docs(
+        docs,
+        openai.Client(
+            api_key="placeholder",
+            base_url=base_url,
+            default_headers={"API-Key": api_key, "Authorization": ""},
+        ),
+)except Exception as e:
     print(f"Warning: Failed to initialize policy retriever: {e}")
     retriever = None
 
