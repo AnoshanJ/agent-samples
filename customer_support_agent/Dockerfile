@@ -15,6 +15,12 @@ COPY agent ./agent
 COPY tools ./tools
 COPY setup/__init__.py setup/db_config.py ./setup/
 
+RUN groupadd --gid 10001 appuser && \
+    useradd --uid 10001 --gid appuser --home-dir /app --shell /usr/sbin/nologin appuser && \
+    chown -R 10001:10001 /app
+
+USER 10001:10001
+
 EXPOSE 8092
 
 CMD ["python", "main.py"]
