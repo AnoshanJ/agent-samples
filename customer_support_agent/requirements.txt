@@ -1,4 +1,3 @@
-
 langgraph
 langchain-community
 langchain_openai
@@ -10,3 +9,4 @@ uvicorn
 sqlalchemy
 psycopg2-binary
 pytz
+amp-instrumentation
