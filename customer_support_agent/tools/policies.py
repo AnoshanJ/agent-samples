@@ -1,4 +1,5 @@
 # %%
+import os
 import re
 
 import numpy as np
@@ -8,6 +9,21 @@ from dotenv import load_dotenv
 from langchain_core.tools import tool
 
 load_dotenv(".env")
+
+
+def create_openai_client():
+    api_key = os.environ.get("CUSTOM_API_KEY")
+    if api_key:
+        base_url = os.environ.get("CUSTOM_BASE_URL")
+        return openai.Client(
+            api_key="placeholder",
+            base_url=base_url,
+            default_headers={
+                "API-Key": api_key,
+                "Authorization": "",
+            },
+        )
+    return openai.Client()
 
 response = requests.get(
     "https://storage.googleapis.com/benchmarks-artifacts/travel-db/swiss_faq.md"
@@ -45,7 +61,7 @@ class VectorStoreRetriever:
         ]
 
 
-retriever = VectorStoreRetriever.from_docs(docs, openai.Client())
+retriever = VectorStoreRetriever.from_docs(docs, create_openai_client())
 
 
 @tool
