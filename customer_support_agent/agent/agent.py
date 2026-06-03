@@ -1,5 +1,7 @@
 # %%
 # from langchain_community.tools.tavily_search import TavilySearchResults
+import os
+
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable
 from langchain_openai import ChatOpenAI
@@ -41,7 +43,43 @@ class Assistant:
 
 
 def create_agent():
-    llm = ChatOpenAI(model="gpt-4o", temperature=1)
+    api_key = os.environ.get("CUSTOM_API_KEY")
+
+    if api_key:
+
+        base_url = os.environ.get("CUSTOM_BASE_URL")
+
+        print(api_key, base_url)
+
+        llm = ChatOpenAI(
+
+            model="gpt-4o",
+
+            temperature=1,
+
+            api_key="placeholder",
+
+            base_url=base_url,
+
+            default_headers={
+
+                "API-Key": api_key,
+
+                "Authorization": "",
+
+            },
+
+        )
+
+    else:
+
+        llm = ChatOpenAI(
+
+            model="gpt-4o",
+
+            temperature=1,
+
+        )
 
     primary_assistant_prompt = ChatPromptTemplate.from_messages(
         [
