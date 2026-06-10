@@ -1,3 +1,4 @@
+import os
 from datetime import date, datetime
 from typing import Optional
 
@@ -174,8 +175,14 @@ def cancel_ticket(ticket_no: str, *, config: RunnableConfig) -> str:
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Table name is env-driven so a deployment can be pointed at the
+    # post-migration schema. Set CANCEL_TICKETS_TABLE=ticket_flights to
+    # simulate "last night's migration renamed the table" — this raises a real
+    # psycopg UndefinedTable error that surfaces in the trace, while the flight
+    # lookup (which still uses the literal table) stays green.
+    cancel_table = os.environ.get("CANCEL_TICKETS_TABLE", "ticket_flights_v2")
     cursor.execute(
-        "SELECT flight_id FROM ticket_flights WHERE ticket_no = %s", (ticket_no,)
+        f"SELECT flight_id FROM {cancel_table} WHERE ticket_no = %s", (ticket_no,)
     )
     existing_ticket = cursor.fetchone()
     if not existing_ticket:
