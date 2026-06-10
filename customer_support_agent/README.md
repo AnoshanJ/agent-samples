@@ -114,9 +114,8 @@ POST /invocations
 
 ```json
 {
-  "thread_id": 123,
-  "passenger_id": "3442 587242",
-  "question": "What is my flight status?"
+  "session_id": "session_123",
+  "message": "What is my flight status?"
 }
 ```
 
@@ -125,7 +124,7 @@ Example curl request:
 ```bash
 curl -X POST http://localhost:8000/invocations \
   -H "Content-Type: application/json" \
-  -d '{"thread_id": 123, "passenger_id": "3442 587242", "question": "What is my flight status?"}'
+  -d '{"session_id": "session_123", "message": "What is my flight status?"}'
 ```
 
 ## Notes & Troubleshooting

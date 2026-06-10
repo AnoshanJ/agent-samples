@@ -266,9 +266,8 @@ python main.py
 curl -X POST http://localhost:8091/invocations \
   -H "Content-Type: application/json" \
   -d '{
-    "thread_id": 1,
-    "question": "Show me available flights",
-    "passenger_id": "3442 587242"
+    "session_id": "session_1",
+    "message": "Show me available flights"
   }'
 ```
 

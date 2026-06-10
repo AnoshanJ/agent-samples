@@ -43,5 +43,10 @@ def run_agent(thread_id: int, question: str, passenger_id: str = "3442 587242"):
 async def chat(payload: dict):
     # Process the payload as needed
     print(f"Request Body: {payload}")
-    result = {"results": run_agent(payload["thread_id"], payload["question"],  payload["passenger_id"],)}
+    result = {
+        "response": run_agent(
+            payload["session_id"],
+            payload["message"],
+        )
+    }
     return JSONResponse(content=result)
