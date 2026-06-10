@@ -12,7 +12,7 @@ from tools.car_rentals import *
 from tools.excursions import *
 from tools.flights import *
 from tools.hotels import *
-from tools.policies import *
+from dotenv import load_dotenv
 
 load_dotenv(".env")
 
@@ -100,7 +100,6 @@ def create_agent():
         # TavilySearchResults(max_results=1),
         fetch_user_flight_information,
         search_flights,
-        lookup_policy,
         update_ticket_to_new_flight,
         cancel_ticket,
         search_car_rentals,
